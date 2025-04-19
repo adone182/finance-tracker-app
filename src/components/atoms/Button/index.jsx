@@ -1,32 +1,14 @@
-import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
 import {styles} from './style';
+import {Icon} from '../Icon';
 
-export const Button = ({
-  title = '',
-  bgColor,
-  onPress,
-  typeIcon = 'Feather',
-  iconName = 'plus-circle',
-  colorIcon = 'white',
-  sizeIcon = 20,
-}) => {
+export const Button = ({title = '', bgColor, onPress, icon = null}) => {
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        {backgroundColor: bgColor, borderWidth: 1, borderColor: 'black'},
-      ]}
+      style={[styles.button, {backgroundColor: bgColor}]}
       onPress={onPress}>
       <Text style={styles.buttonText}>{title}</Text>
-      {typeIcon === 'Feather' ? (
-        <Feather name={iconName} size={sizeIcon} color={colorIcon} />
-      ) : (
-        <FontAwesome5 name={iconName} size={sizeIcon} color={colorIcon} />
-      )}
+      {icon && <Icon {...icon} />}
     </TouchableOpacity>
   );
 };
