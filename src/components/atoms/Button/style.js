@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 6,
-    gap: 5,
+    gap: 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: 'white',
