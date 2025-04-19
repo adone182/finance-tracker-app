@@ -16,20 +16,20 @@ const initialState = {
       iconName: 'shopping-bag',
       typeIcon: 'FontAwesome5',
     },
-    // {
-    //   id: 'edit',
-    //   title: 'Edit',
-    //   bgColor: '#34c759',
-    //   iconName: 'edit',
-    //   typeIcon: 'Feather',
-    // },
-    // {
-    //   id: 'hapus',
-    //   title: 'Hapus',
-    //   bgColor: '#34c759',
-    //   iconName: 'x',
-    //   typeIcon: 'Feather',
-    // },
+    {
+      id: 'edit',
+      title: 'Edit',
+      bgColor: '#34c759',
+      iconName: 'edit',
+      typeIcon: 'Feather',
+    },
+    {
+      id: 'hapus',
+      title: 'Hapus',
+      bgColor: '#34c759',
+      iconName: 'x',
+      typeIcon: 'Feather',
+    },
   ],
 };
 

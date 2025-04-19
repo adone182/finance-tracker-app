@@ -7,7 +7,7 @@ export const Icon = ({
   type = 'Feather',
   name = 'circle',
   size = 20,
-  color = 'black',
+  color = 'white',
 }) => {
   const IconComponent =
     type === 'FontAwesome'
