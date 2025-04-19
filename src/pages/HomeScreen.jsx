@@ -7,7 +7,7 @@ export const HomeScreen = () => {
   const allButtons = useSelector(state => state.buttons.buttons);
   const allIcons = useSelector(state => state.icons.icons);
 
-  const allowed = ['pemasukan', 'pengeluaran'];
+  const allowed = ['pemasukan'];
 
   const getIconById = id => allIcons.find(icon => icon.id === id);
 
