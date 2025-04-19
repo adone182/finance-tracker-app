@@ -5,18 +5,22 @@ import {Button} from '../components/atoms/Button';
 
 export const HomeScreen = () => {
   const allButtons = useSelector(state => state.buttons.buttons);
+  const allIcons = useSelector(state => state.icons.icons);
+
   const allowed = ['pemasukan', 'pengeluaran'];
 
-  const handleButtonClick = title => {
-    console.log(`Klik tombol ${title}`);
-  };
+  const getIconById = id => allIcons.find(icon => icon.id === id);
 
   const filteredButtons = allButtons
     .filter(btn => allowed.includes(btn.id))
-    .map(btn => ({
-      ...btn,
-      onPress: () => handleButtonClick(btn.title),
-    }));
+    .map(btn => {
+      const icon = getIconById(btn.iconId);
+      return {
+        ...btn,
+        onPress: () => console.log(`Klik tombol ${btn.title}`),
+        icon,
+      };
+    });
 
   return (
     <View>
@@ -26,8 +30,7 @@ export const HomeScreen = () => {
           title={btn.title}
           onPress={btn.onPress}
           bgColor={btn.bgColor}
-          iconName={btn.iconName}
-          typeIcon={btn.typeIcon}
+          icon={btn.icon}
         />
       ))}
     </View>
