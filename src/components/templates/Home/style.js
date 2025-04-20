@@ -49,13 +49,12 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#3c3dbf',
-    marginVertical: 10,
+    marginVertical: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
-    // marginBottom: 20,
   },
   transactionItem: {
     flexDirection: 'row',
@@ -69,15 +68,19 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    marginBottom: 20,
   },
   transactionLeft: {
     flex: 3,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    gap: 10,
   },
   transactionRight: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-end',
-    gap: 10,
+    gap: 50,
   },
   descriptionText: {
     fontSize: 16,
@@ -90,10 +93,10 @@ export const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: 10,
+    justifyContent: 'flex-end',
+    gap: 4,
     marginTop: 12,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   nominalText: {
     fontSize: 16,

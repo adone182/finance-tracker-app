@@ -68,7 +68,7 @@ const initialState = {
   ],
 };
 
-const buttonReducer = (state = initialState, action) => {
+export const buttonReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_BUTTONS:
       return {
@@ -79,5 +79,3 @@ const buttonReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default buttonReducer;

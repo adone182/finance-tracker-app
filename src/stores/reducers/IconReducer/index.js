@@ -61,7 +61,7 @@ const initialState = {
   ],
 };
 
-const iconReducer = (state = initialState, action) => {
+export const iconReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_ICONS:
       return {
@@ -72,5 +72,3 @@ const iconReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default iconReducer;

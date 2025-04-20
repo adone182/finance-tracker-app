@@ -12,31 +12,18 @@ import {
 import {FormatCurrencyId} from '../../../utils/helpers/CurrencyIdFormat';
 import {FormatDate} from '../../../utils/helpers/DateFormat';
 import {Icon} from '../../atoms/Icon';
+import {TransactionCard} from '../../molecules/TransactionCard';
+import {TransactionList} from '../../organisms/TransactionList';
 
-export const Home = ({
-  totalIncome,
-  totalExpense,
-  remainingAmount,
-  submittedData,
-  handleButtonClick,
-  isModalOpen,
-  handleCloseModal,
-  modalType,
-  handleSubmit,
-  handleDeleteAll,
-}) => {
+export const Home = ({totalIncome, totalExpense, remainingAmount}) => {
   const dispatch = useDispatch();
-  console.log('total income', totalIncome);
-  console.log('remainingAmount', remainingAmount);
   const allButtons = useSelector(state => state.buttons.buttons);
   const allIcons = useSelector(state => state.icons.icons);
   const transactions = useSelector(state => state.transactions.transactions);
+
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  console.log('All Transactions:', transactions);
-
   const allowed = ['pemasukan', 'pengeluaran', 'edit', 'hapus'];
-
   const getIconById = id => allIcons.find(icon => icon.id === id);
 
   const handlePemasukan = () => dispatch(showModal('pemasukan'));
@@ -121,6 +108,37 @@ export const Home = ({
         </Text>
       </View>
 
+      <View style={styles.cardContainer}>
+        <TransactionCard
+          type="FontAwesome5"
+          name="wallet"
+          size={30}
+          iconColor="#0d6efd"
+          bgColor="#E0E7FF"
+          color="#3B82F6"
+          title="Pemasukan Kamu"
+          money={totalIncome}
+          amountOfTransaction={
+            transactions.filter(item => item.typeTrancation === 'pemasukan')
+              .length
+          }
+        />
+        <TransactionCard
+          type="FontAwesome5"
+          name="shopping-bag"
+          size={30}
+          iconColor="#dc3545"
+          bgColor="#FEE2E2"
+          color="#EF4444"
+          title="Pengeluaran Kamu"
+          money={totalExpense}
+          amountOfTransaction={
+            transactions.filter(item => item.typeTrancation === 'pengeluaran')
+              .length
+          }
+        />
+      </View>
+
       <View style={styles.transactionContainer}>
         <View style={styles.buttonContainer}>
           {filteredButtons
@@ -151,78 +169,13 @@ export const Home = ({
           </Text>
         ) : (
           transactions.map(transaction => (
-            <View key={transaction.id}>
-              <View style={styles.transactionItem}>
-                <View style={styles.transactionLeft}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 10,
-                    }}>
-                    <Icon
-                      type="FontAwesome5"
-                      name={
-                        transaction.typeTrancation === 'pemasukan'
-                          ? 'wallet'
-                          : 'shopping-bag'
-                      }
-                      size={22}
-                      color={
-                        transaction.typeTrancation === 'pemasukan'
-                          ? '#3c3dbf'
-                          : '#ff3666'
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.amountText,
-                        {
-                          color:
-                            transaction.typeTrancation === 'pemasukan'
-                              ? '#3c3dbf'
-                              : '#ff3666',
-                        },
-                      ]}>
-                      {FormatCurrencyId(transaction.nominal)},-
-                    </Text>
-                  </View>
-
-                  <Text
-                    style={[
-                      styles.descriptionText,
-                      {
-                        color:
-                          transaction.typeTrancation === 'pemasukan'
-                            ? '#3c3dbf'
-                            : '#ff3666',
-                      },
-                    ]}>
-                    {transaction.description}
-                  </Text>
-                  <Text style={styles.dateText}>
-                    {FormatDate(transaction.date)}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.actionButtons}>
-                {filteredButtons
-                  .filter(btn => ['edit', 'hapus'].includes(btn.id))
-                  .map(btn => (
-                    <Button
-                      key={btn.id}
-                      title={btn.title}
-                      onPress={() =>
-                        btn.id === 'edit'
-                          ? handleEdit(transaction)
-                          : handleDelete(transaction.id)
-                      }
-                      icon={btn.icon}
-                      style={btn.style}
-                    />
-                  ))}
-              </View>
-            </View>
+            <TransactionList
+              key={transaction.id}
+              transaction={transaction}
+              filteredButtons={filteredButtons}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
           ))
         )}
 
