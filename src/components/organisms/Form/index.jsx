@@ -127,9 +127,9 @@ export const Form = ({formType, onSubmit}) => {
           <Button
             key={btn.id}
             title={btn.title}
-            bgColor={btn.bgColor}
             icon={btn.icon}
             onPress={handleSubmit(onSubmitHandler)}
+            style={btn.style}
           />
         ))}
       </View>

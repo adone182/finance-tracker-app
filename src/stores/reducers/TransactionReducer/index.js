@@ -14,6 +14,7 @@ const initialState = {
 export const transactionReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TRANSACTION:
+      console.log('Dispatching ADD_TRANSACTION:', action.payload);
       return {
         ...state,
         transactions: [...state.transactions, action.payload],

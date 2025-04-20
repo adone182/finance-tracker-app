@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator, ScrollView} from 'react-native';
 import {Home} from '../components/templates/Home';
 import {
   fetchTransactions,
   deleteTransaction,
   updateTransaction,
-} from '../actions/TransactionAction';
+} from '../stores/actions/TransactionAction';
 
 export const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -43,23 +43,20 @@ export const HomeScreen = () => {
     setEditType('');
   };
 
-  const handleDeleteAll = () => {
+  const handleDelete = () => {
     dispatch(deleteTransaction(id));
   };
 
   return (
-    <View>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Home
-          totalIncome={totalIncome}
-          totalExpense={totalExpense}
-          remainingAmount={remainingAmount}
-          submittedData={transactions}
-          loading={loading}
-        />
-      )}
-    </View>
+    <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16}}>
+      <Home
+        title="FINANCE TRACKER {'\n'} APP"
+        totalIncome={totalIncome}
+        totalExpense={totalExpense}
+        remainingAmount={remainingAmount}
+        submittedData={transactions}
+        loading={loading}
+      />
+    </ScrollView>
   );
 };
