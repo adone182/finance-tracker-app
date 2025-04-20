@@ -99,11 +99,11 @@ export const Form = ({formType, onSubmit, defaultValues}) => {
     };
 
     console.log('Form Data:', formDataWithId);
-    dispatch(
-      defaultValues?.id
-        ? updateTransaction(formDataWithId)
-        : addTransaction(formDataWithId),
-    );
+    if (defaultValues?.id) {
+      dispatch(updateTransaction(formDataWithId)); // EDIT
+    } else {
+      dispatch(addTransaction(formDataWithId)); // CREATE
+    }
     onSubmit(formDataWithId);
   };
 

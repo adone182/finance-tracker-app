@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StatusBar} from 'react-native';
+import {View, Text, StatusBar, Alert} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {styles} from './style';
 import {FormModal} from '../../organisms/FormModal';
@@ -46,7 +46,24 @@ export const Home = ({
   };
 
   const handleDelete = id => {
-    dispatch(deleteTransaction(id));
+    Alert.alert(
+      'Konfirmasi Hapus',
+      'Apakah Anda yakin ingin menghapus transaksi ini?',
+      [
+        {
+          text: 'Batal',
+          onPress: () => console.log('Hapus dibatalkan'),
+          style: 'cancel',
+        },
+        {
+          text: 'Hapus',
+          onPress: () => {
+            dispatch(deleteTransaction(id));
+          },
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
   const getOnPressById = id => {

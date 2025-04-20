@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import {FormatCurrencyId} from '../../../utils/helpers/CurrencyIdFormat';
 
 export const ADD_TRANSACTION = 'ADD_TRANSACTION';
 export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
@@ -21,8 +23,21 @@ export const addTransaction = transaction => {
         type: ADD_TRANSACTION,
         payload: transaction,
       });
+
+      const nominal = transaction.nominal;
+      const formattedNominal = FormatCurrencyId(nominal);
+
+      Toast.show({
+        type: 'success',
+        text1: 'Transaksi Berhasil Ditambahkan',
+        text2: `Nominal: ${formattedNominal}`,
+      });
     } catch (error) {
-      console.error('Error adding transaction to AsyncStorage:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Gagal Menambahkan Transaksi',
+        text2: error.message || 'Terjadi kesalahan saat menambahkan transaksi.',
+      });
     }
   };
 };
@@ -46,8 +61,20 @@ export const updateTransaction = updatedTransaction => {
         type: UPDATE_TRANSACTION,
         payload: updatedTransaction,
       });
+
+      const nominal = updatedTransaction.nominal;
+      const formattedNominal = FormatCurrencyId(nominal);
+      Toast.show({
+        type: 'success',
+        text1: 'Transaksi Berhasil Diperbarui',
+        text2: `Nominal: ${formattedNominal}`,
+      });
     } catch (error) {
-      console.error('Error updating transaction in AsyncStorage:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Gagal Memperbarui Transaksi',
+        text2: error.message || 'Terjadi kesalahan saat memperbarui transaksi.',
+      });
     }
   };
 };
@@ -69,8 +96,18 @@ export const deleteTransaction = id => {
         type: DELETE_TRANSACTION,
         payload: id,
       });
+
+      Toast.show({
+        type: 'success',
+        text1: 'Transaksi Berhasil Dihapus',
+        text2: `ID Transaksi: ${id}`,
+      });
     } catch (error) {
-      console.error('Error deleting transaction from AsyncStorage:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Gagal Menghapus Transaksi',
+        text2: error.message || 'Terjadi kesalahan saat menghapus transaksi.',
+      });
     }
   };
 };
@@ -88,7 +125,12 @@ export const fetchTransactions = () => {
         payload: parsedTransactions,
       });
     } catch (error) {
-      console.error('Error fetching transactions from AsyncStorage:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Gagal Mengambil Data Transaksi',
+        text2:
+          error.message || 'Terjadi kesalahan saat mengambil data transaksi.',
+      });
     } finally {
       dispatch(setLoading(false));
     }
