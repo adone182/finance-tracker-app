@@ -42,10 +42,49 @@ export const addTransaction = transaction => {
   };
 };
 
+// export const updateTransaction = updatedTransaction => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const {transactions} = getState().transactions;
+//       const updatedTransactions = transactions.map(transaction =>
+//         transaction.id === updatedTransaction.id
+//           ? {...transaction, ...updatedTransaction}
+//           : transaction,
+//       );
+
+//       await AsyncStorage.setItem(
+//         'transactions',
+//         JSON.stringify(updatedTransactions),
+//       );
+
+//       dispatch({
+//         type: UPDATE_TRANSACTION,
+//         payload: updatedTransaction,
+//       });
+
+//       const nominal = updatedTransaction.nominal;
+//       const formattedNominal = FormatCurrencyId(nominal);
+//       Toast.show({
+//         type: 'success',
+//         text1: 'Transaksi Berhasil Diperbarui',
+//         text2: `Nominal: ${formattedNominal}`,
+//       });
+//     } catch (error) {
+//       Toast.show({
+//         type: 'error',
+//         text1: 'Gagal Memperbarui Transaksi',
+//         text2: error.message || 'Terjadi kesalahan saat memperbarui transaksi.',
+//       });
+//     }
+//   };
+// };
 export const updateTransaction = updatedTransaction => {
   return async (dispatch, getState) => {
     try {
       const {transactions} = getState().transactions;
+      console.log('Current Transactions:', transactions); // Check existing transactions
+      console.log('Updated Transaction:', updatedTransaction); // Check the updated transaction
+
       const updatedTransactions = transactions.map(transaction =>
         transaction.id === updatedTransaction.id
           ? {...transaction, ...updatedTransaction}
@@ -112,6 +151,30 @@ export const deleteTransaction = id => {
   };
 };
 
+// export const fetchTransactions = () => {
+//   return async dispatch => {
+//     dispatch(setLoading(true));
+
+//     try {
+//       const transactions = await AsyncStorage.getItem('transactions');
+//       const parsedTransactions = transactions ? JSON.parse(transactions) : [];
+
+//       dispatch({
+//         type: FETCH_TRANSACTIONS,
+//         payload: parsedTransactions,
+//       });
+//     } catch (error) {
+//       Toast.show({
+//         type: 'error',
+//         text1: 'Gagal Mengambil Data Transaksi',
+//         text2:
+//           error.message || 'Terjadi kesalahan saat mengambil data transaksi.',
+//       });
+//     } finally {
+//       dispatch(setLoading(false));
+//     }
+//   };
+// };
 export const fetchTransactions = () => {
   return async dispatch => {
     dispatch(setLoading(true));
@@ -119,6 +182,7 @@ export const fetchTransactions = () => {
     try {
       const transactions = await AsyncStorage.getItem('transactions');
       const parsedTransactions = transactions ? JSON.parse(transactions) : [];
+      console.log('Fetched Transactions:', parsedTransactions); // Check if data is fetched correctly
 
       dispatch({
         type: FETCH_TRANSACTIONS,

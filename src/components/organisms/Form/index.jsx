@@ -10,6 +10,7 @@ import uuid from 'react-native-uuid';
 import {setFormField} from '../../../stores/actions/FormAction';
 import {
   addTransaction,
+  fetchTransactions,
   updateTransaction,
 } from '../../../stores/actions/TransactionAction';
 
@@ -56,25 +57,36 @@ export const Form = ({formType, onSubmit, defaultValues}) => {
     formState: {errors},
   } = useForm({
     resolver: yupResolver(validationSchema),
-    defaultValues: formValues,
+    defaultValues: defaultValues ?? formValues,
   });
 
   useEffect(() => {
-    reset({
-      nominal: '',
-      description: '',
-      date: '',
-    });
-  }, []);
+    if (formType === 'pemasukan' || formType === 'pengeluaran') {
+      reset({
+        nominal: '',
+        description: '',
+        date: '',
+      });
+    } else {
+      reset(
+        defaultValues || {
+          nominal: '',
+          description: '',
+          date: '',
+        },
+      );
+    }
+  }, [defaultValues, formType, reset]);
 
   const handleInputChange = (fieldName, value, onChange) => {
     onChange(value);
     dispatch(setFormField({[fieldName]: value}));
   };
 
-  const filteredFields = fields.filter(field =>
-    field.type.includes(formType.toLowerCase()),
-  );
+  const filteredFields =
+    formType.toLowerCase() === 'edit'
+      ? fields
+      : fields.filter(field => field.type.includes(formType.toLowerCase()));
 
   const allowed = ['simpan'];
 
@@ -92,19 +104,29 @@ export const Form = ({formType, onSubmit, defaultValues}) => {
     });
 
   const onSubmitHandler = data => {
-    const formDataWithId = {
-      ...data,
-      id: uuid.v4(),
-      typeTrancation: formType,
-    };
+    if (formType === 'edit' && defaultValues?.id) {
+      const updatedFormData = {
+        ...data,
+        id: defaultValues.id,
+        typeTrancation: formType,
+      };
 
-    console.log('Form Data:', formDataWithId);
-    if (defaultValues?.id) {
-      dispatch(updateTransaction(formDataWithId)); // EDIT
+      console.log('EDITING transaction:', updatedFormData);
+      dispatch(updateTransaction(updatedFormData));
+      dispatch(fetchTransactions());
+      onSubmit(updatedFormData);
     } else {
-      dispatch(addTransaction(formDataWithId)); // CREATE
+      const newTransaction = {
+        ...data,
+        id: uuid.v4(),
+        typeTrancation: formType,
+      };
+
+      console.log('ADDING new transaction:', newTransaction);
+      dispatch(addTransaction(newTransaction));
+      dispatch(fetchTransactions());
+      onSubmit(newTransaction);
     }
-    onSubmit(formDataWithId);
   };
 
   return (
@@ -117,7 +139,7 @@ export const Form = ({formType, onSubmit, defaultValues}) => {
             render={({field: {onChange, value}}) => (
               <FormInput
                 label={field.label}
-                value={value || ''}
+                value={value ? String(value) : ''}
                 onChangeText={text =>
                   handleInputChange(field.name, text, onChange)
                 }

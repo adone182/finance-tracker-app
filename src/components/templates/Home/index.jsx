@@ -40,6 +40,7 @@ export const Home = ({
 
   const handlePemasukan = () => dispatch(showModal('pemasukan'));
   const handlePengeluaran = () => dispatch(showModal('pengeluaran'));
+
   const handleEdit = transaction => {
     setSelectedTransaction(transaction);
     dispatch(showModal('edit'));
@@ -86,14 +87,6 @@ export const Home = ({
     .map(btn => {
       const icon = getIconById(btn.iconId);
       const onPress = getOnPressById(btn.id);
-
-      console.log('Filtered Button:', {
-        id: btn.id,
-        title: btn.title,
-        iconId: btn.iconId,
-        resolvedIcon: icon,
-      });
-
       return {
         ...btn,
         onPress,
@@ -166,17 +159,18 @@ export const Home = ({
                       justifyContent: 'space-between',
                       marginBottom: 10,
                     }}>
-                    {/* <FontAwesome5
+                    <Icon
+                      type="FontAwesome5"
                       name={
                         transaction.type === 'Pemasukan'
                           ? 'wallet'
                           : 'shopping-bag'
                       }
-                      size={25}
+                      size={22}
                       color={
                         transaction.type === 'Pemasukan' ? '#3c3dbf' : '#ff3666'
                       }
-                    /> */}
+                    />
                     <Text
                       style={[
                         styles.amountText,
