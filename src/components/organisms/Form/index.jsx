@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Button} from 'react-native';
+import {View} from 'react-native';
 import {FormInput} from '../../molecules/FormInput';
-import {Button} from '../components/atoms/Button';
+import {Button} from '../../atoms/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {setFormField} from '../../../stores/actions/FormAction';
 

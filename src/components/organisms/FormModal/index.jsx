@@ -1,37 +1,65 @@
 import React from 'react';
-import {Modal, View, Text, Button} from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  Button,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {styles} from './style';
+import {hideModal} from '../../../stores/actions/ModalAction';
+import {Form} from '../Form';
+import {Icon} from '../../atoms/Icon';
 
 export const FormModal = () => {
   const dispatch = useDispatch();
   const {visible, formType} = useSelector(state => state.modal);
 
+  const allIcons = useSelector(state => state.icons.icons);
+  const getCloseIcon = () => allIcons.find(icon => icon.id === 'close');
+
   const handleClose = () => {
     dispatch(hideModal());
   };
+
+  const closeIcon = getCloseIcon();
 
   return (
     <Modal
       visible={visible}
       animationType="slide"
       transparent={true}
-      onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>
-            {formType === 'pemasukan' ? 'Form Pemasukan' : 'Form Pengeluaran'}
-          </Text>
+      onRequestClose={handleClose}>
+      <TouchableWithoutFeedback onPress={handleClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View style={styles.modalContainer}>
+              {/* Tombol Close di atas */}
+              {closeIcon && (
+                <TouchableOpacity onPress={handleClose}>
+                  <View style={styles.closeButton}>
+                    <Icon
+                      name={closeIcon.name}
+                      type={closeIcon.type}
+                      size={closeIcon.size}
+                      color={closeIcon.color}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+              <Text style={styles.modalTitle}>
+                {formType === 'pemasukan'
+                  ? 'Form Pemasukan'
+                  : 'Form Pengeluaran'}
+              </Text>
 
-          <Form formType={formType} onSubmit={handleClose} />
-
-          <Button
-            style={styles.buttonContainer}
-            title="Tutup"
-            onPress={handleClose}
-          />
+              <Form formType={formType} onSubmit={handleClose} />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

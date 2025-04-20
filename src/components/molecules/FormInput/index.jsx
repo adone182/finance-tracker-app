@@ -20,7 +20,7 @@ export const FormInput = ({
         placeholder={placeholder}
         keyboardType={keyboardType}
       />
-      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}{' '}
+      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     </View>
   );
 };

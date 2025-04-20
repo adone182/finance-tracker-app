@@ -1,38 +1,26 @@
 import React from 'react';
-import {View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {Button} from '../components/atoms/Button';
+import {View, Button} from 'react-native';
+import {showModal} from '../stores/actions/ModalAction';
+import {FormModal} from '../components/organisms/FormModal';
+import {useDispatch} from 'react-redux';
 
 export const HomeScreen = () => {
-  const allButtons = useSelector(state => state.buttons.buttons);
-  const allIcons = useSelector(state => state.icons.icons);
+  const dispatch = useDispatch();
 
-  const allowed = ['pemasukan'];
+  const handlePemasukan = () => {
+    dispatch(showModal('pemasukan'));
+  };
 
-  const getIconById = id => allIcons.find(icon => icon.id === id);
-
-  const filteredButtons = allButtons
-    .filter(btn => allowed.includes(btn.id))
-    .map(btn => {
-      const icon = getIconById(btn.iconId);
-      return {
-        ...btn,
-        onPress: () => console.log(`Klik tombol ${btn.title}`),
-        icon,
-      };
-    });
+  const handlePengeluaran = () => {
+    dispatch(showModal('pengeluaran'));
+  };
 
   return (
     <View>
-      {filteredButtons.map(btn => (
-        <Button
-          key={btn.id}
-          title={btn.title}
-          onPress={btn.onPress}
-          bgColor={btn.bgColor}
-          icon={btn.icon}
-        />
-      ))}
+      <Button title="Pemasukan" onPress={handlePemasukan} />
+      <Button title="Pengeluaran" onPress={handlePengeluaran} />
+
+      <FormModal />
     </View>
   );
 };

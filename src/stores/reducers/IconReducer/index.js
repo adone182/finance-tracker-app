@@ -30,6 +30,34 @@ const initialState = {
       size: 20,
       color: 'white',
     },
+    {
+      id: 'save',
+      type: 'Feather',
+      name: 'save',
+      size: 20,
+      color: 'white',
+    },
+    {
+      id: 'edit',
+      type: 'Feather',
+      name: 'edit',
+      size: 20,
+      color: 'white',
+    },
+    {
+      id: 'hapus',
+      type: 'Feather',
+      name: 'trash-2',
+      size: 20,
+      color: 'white',
+    },
+    {
+      id: 'close',
+      type: 'Feather',
+      name: 'x',
+      size: 18,
+      color: 'white',
+    },
   ],
 };
 

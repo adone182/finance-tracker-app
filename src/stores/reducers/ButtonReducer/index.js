@@ -24,7 +24,13 @@ const initialState = {
       id: 'hapus',
       title: 'Hapus',
       bgColor: '#34c759',
-      iconId: 'x',
+      iconId: 'hapus',
+    },
+    {
+      id: 'simpan',
+      title: 'Simpan',
+      bgColor: '#34c759',
+      iconId: 'save',
     },
   ],
 };
