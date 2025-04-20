@@ -1,14 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {styles} from './style';
 import {FormModal} from '../../organisms/FormModal';
 import {Button} from '../../atoms/Button';
 import {showModal} from '../../../stores/actions/ModalAction';
-import {fetchTransactions} from '../../../stores/actions/TransactionAction';
+import {
+  deleteTransaction,
+  fetchTransactions,
+} from '../../../stores/actions/TransactionAction';
 import {FormatCurrencyId} from '../../../utils/helpers/CurrencyIdFormat';
 import {FormatDate} from '../../../utils/helpers/DateFormat';
-// import {Icon} from '../../atoms/Icon';
+import {Icon} from '../../atoms/Icon';
 
 export const Home = ({
   totalIncome,
@@ -27,6 +30,7 @@ export const Home = ({
   const allButtons = useSelector(state => state.buttons.buttons);
   const allIcons = useSelector(state => state.icons.icons);
   const transactions = useSelector(state => state.transactions.transactions);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   console.log('All Transactions:', transactions);
 
@@ -36,8 +40,14 @@ export const Home = ({
 
   const handlePemasukan = () => dispatch(showModal('pemasukan'));
   const handlePengeluaran = () => dispatch(showModal('pengeluaran'));
-  const handleEdit = () => console.log('Edit button pressed');
-  const handleDelete = () => console.log('Delete button pressed');
+  const handleEdit = transaction => {
+    setSelectedTransaction(transaction);
+    dispatch(showModal('edit'));
+  };
+
+  const handleDelete = id => {
+    dispatch(deleteTransaction(id));
+  };
 
   const getOnPressById = id => {
     switch (id) {
@@ -115,8 +125,15 @@ export const Home = ({
             ))}
         </View>
 
-        {/* Daftar Transaksi */}
-        <Text style={styles.transactionTitle}>Ringkasan Transaksi</Text>
+        <Text style={styles.transactionTitle}>
+          <Icon
+            type="FontAwesome"
+            name="line-chart"
+            size={22}
+            color="#3c3dbf"
+          />{' '}
+          Ringkasan Transaksi
+        </Text>
         {transactions.length === 0 ? (
           <Text style={styles.noTransactionText}>
             Ooops....Belom ada transaksi nih!
@@ -181,7 +198,11 @@ export const Home = ({
                     <Button
                       key={btn.id}
                       title={btn.title}
-                      onPress={btn.onPress}
+                      onPress={() =>
+                        btn.id === 'edit'
+                          ? handleEdit(transaction)
+                          : handleDelete(transaction.id)
+                      }
                       icon={btn.icon}
                       style={btn.style}
                     />
@@ -191,7 +212,7 @@ export const Home = ({
           ))
         )}
 
-        <FormModal />
+        <FormModal selectedTransaction={selectedTransaction} />
       </View>
     </View>
   );

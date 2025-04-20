@@ -12,7 +12,7 @@ import {hideModal} from '../../../stores/actions/ModalAction';
 import {Form} from '../Form';
 import {Icon} from '../../atoms/Icon';
 
-export const FormModal = () => {
+export const FormModal = ({selectedTransaction}) => {
   const dispatch = useDispatch();
   const {visible, formType} = useSelector(state => state.modal);
 
@@ -55,10 +55,16 @@ export const FormModal = () => {
               <Text style={styles.modalTitle}>
                 {formType === 'pemasukan'
                   ? 'Form Pemasukan'
-                  : 'Form Pengeluaran'}
+                  : formType === 'pengeluaran'
+                  ? 'Form Pengeluaran'
+                  : 'Edit Transaksi'}
               </Text>
 
-              <Form formType={formType} onSubmit={handleFormSubmit} />
+              <Form
+                formType={formType}
+                onSubmit={handleFormSubmit}
+                defaultValues={selectedTransaction}
+              />
             </View>
           </TouchableWithoutFeedback>
         </View>

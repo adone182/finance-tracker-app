@@ -50,7 +50,6 @@ export const HomeScreen = () => {
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16}}>
       <Home
-        title="FINANCE TRACKER {'\n'} APP"
         totalIncome={totalIncome}
         totalExpense={totalExpense}
         remainingAmount={remainingAmount}

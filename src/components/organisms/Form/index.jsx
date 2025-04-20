@@ -8,7 +8,10 @@ import {FormInput} from '../../molecules/FormInput';
 import {Button} from '../../atoms/Button';
 import uuid from 'react-native-uuid';
 import {setFormField} from '../../../stores/actions/FormAction';
-import {addTransaction} from '../../../stores/actions/TransactionAction';
+import {
+  addTransaction,
+  updateTransaction,
+} from '../../../stores/actions/TransactionAction';
 
 const validationSchema = yup.object().shape({
   nominal: yup
@@ -39,7 +42,7 @@ const validationSchema = yup.object().shape({
     }),
 });
 
-export const Form = ({formType, onSubmit}) => {
+export const Form = ({formType, onSubmit, defaultValues}) => {
   const dispatch = useDispatch();
   const fields = useSelector(state => state.formConfig.fields);
   const formValues = useSelector(state => state.form);
@@ -92,10 +95,15 @@ export const Form = ({formType, onSubmit}) => {
     const formDataWithId = {
       ...data,
       id: uuid.v4(),
+      typeTrancation: formType,
     };
 
     console.log('Form Data:', formDataWithId);
-    dispatch(addTransaction(formDataWithId));
+    dispatch(
+      defaultValues?.id
+        ? updateTransaction(formDataWithId)
+        : addTransaction(formDataWithId),
+    );
     onSubmit(formDataWithId);
   };
 
