@@ -26,7 +26,8 @@ export const Home = ({
   handleDeleteAll,
 }) => {
   const dispatch = useDispatch();
-
+  console.log('total income', totalIncome);
+  console.log('remainingAmount', remainingAmount);
   const allButtons = useSelector(state => state.buttons.buttons);
   const allIcons = useSelector(state => state.icons.icons);
   const transactions = useSelector(state => state.transactions.transactions);
@@ -162,13 +163,15 @@ export const Home = ({
                     <Icon
                       type="FontAwesome5"
                       name={
-                        transaction.type === 'Pemasukan'
+                        transaction.typeTrancation === 'pemasukan'
                           ? 'wallet'
                           : 'shopping-bag'
                       }
                       size={22}
                       color={
-                        transaction.type === 'Pemasukan' ? '#3c3dbf' : '#ff3666'
+                        transaction.typeTrancation === 'pemasukan'
+                          ? '#3c3dbf'
+                          : '#ff3666'
                       }
                     />
                     <Text
@@ -176,7 +179,7 @@ export const Home = ({
                         styles.amountText,
                         {
                           color:
-                            transaction.type === 'Pemasukan'
+                            transaction.typeTrancation === 'pemasukan'
                               ? '#3c3dbf'
                               : '#ff3666',
                         },
@@ -190,7 +193,7 @@ export const Home = ({
                       styles.descriptionText,
                       {
                         color:
-                          transaction.type === 'Pemasukan'
+                          transaction.typeTrancation === 'pemasukan'
                             ? '#3c3dbf'
                             : '#ff3666',
                       },
