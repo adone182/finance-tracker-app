@@ -1,26 +1,65 @@
-import React from 'react';
-import {View, Button} from 'react-native';
-import {showModal} from '../stores/actions/ModalAction';
-import {FormModal} from '../components/organisms/FormModal';
-import {useDispatch} from 'react-redux';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {View, ActivityIndicator} from 'react-native';
+import {Home} from '../components/templates/Home';
+import {
+  fetchTransactions,
+  deleteTransaction,
+  updateTransaction,
+} from '../actions/TransactionAction';
 
 export const HomeScreen = () => {
   const dispatch = useDispatch();
+  const transactions = useSelector(state => state.transactions.transactions);
+  const loading = useSelector(state => state.transactions.loading);
 
-  const handlePemasukan = () => {
-    dispatch(showModal('pemasukan'));
+  useEffect(() => {
+    dispatch(fetchTransactions());
+  }, [dispatch]);
+
+  const totalIncome = transactions
+    .filter(item => item.type === 'Pemasukan')
+    .reduce((acc, curr) => acc + curr.nominal, 0);
+  const totalExpense = transactions
+    .filter(item => item.type === 'Pengeluaran')
+    .reduce((acc, curr) => acc + curr.nominal, 0);
+  const remainingAmount = totalIncome - totalExpense;
+
+  const handleEdit = updatedData => {
+    const updatedTransaction = {
+      id: updatedData.id,
+      nominal: updatedData.nominal,
+      description: updatedData.description,
+      date: updatedData.date,
+      type: updatedData.type,
+    };
+
+    dispatch(updateTransaction(updatedTransaction));
+
+    setEditId(null);
+    setEditNominal('');
+    setEditDescription('');
+    setEditDate('');
+    setEditType('');
   };
 
-  const handlePengeluaran = () => {
-    dispatch(showModal('pengeluaran'));
+  const handleDeleteAll = () => {
+    dispatch(deleteTransaction(id));
   };
 
   return (
     <View>
-      <Button title="Pemasukan" onPress={handlePemasukan} />
-      <Button title="Pengeluaran" onPress={handlePengeluaran} />
-
-      <FormModal />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <Home
+          totalIncome={totalIncome}
+          totalExpense={totalExpense}
+          remainingAmount={remainingAmount}
+          submittedData={transactions}
+          loading={loading}
+        />
+      )}
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import {
   ADD_TRANSACTION,
+  UPDATE_TRANSACTION,
   DELETE_TRANSACTION,
   FETCH_TRANSACTIONS,
   SET_LOADING,
@@ -10,12 +11,22 @@ const initialState = {
   loading: false,
 };
 
-const transactionReducer = (state = initialState, action) => {
+export const transactionReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TRANSACTION:
       return {
         ...state,
         transactions: [...state.transactions, action.payload],
+      };
+
+    case UPDATE_TRANSACTION:
+      return {
+        ...state,
+        transactions: state.transactions.map(transaction =>
+          transaction.id === action.payload.id
+            ? {...transaction, ...action.payload}
+            : transaction,
+        ),
       };
 
     case DELETE_TRANSACTION:
@@ -42,5 +53,3 @@ const transactionReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default transactionReducer;
