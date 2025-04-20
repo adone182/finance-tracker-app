@@ -13,5 +13,6 @@ export const styles = StyleSheet.create({
     color: 'red',
     fontStyle: 'italic',
     fontSize: 12,
+    marginTop: -10,
   },
 });

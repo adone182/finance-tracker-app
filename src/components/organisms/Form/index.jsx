@@ -1,18 +1,73 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import {FormInput} from '../../molecules/FormInput';
 import {Button} from '../../atoms/Button';
-import {useDispatch, useSelector} from 'react-redux';
+import uuid from 'react-native-uuid';
 import {setFormField} from '../../../stores/actions/FormAction';
+import {addTransaction} from '../../../stores/actions/TransactionAction';
+
+const validationSchema = yup.object().shape({
+  nominal: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : Number(originalValue);
+    })
+    .required('Nominal wajib diisi')
+    .positive('Nominal harus lebih besar dari 0'),
+
+  description: yup
+    .string()
+    .max(100, 'Deskripsi tidak boleh lebih dari 100 karakter')
+    .required('Deskripsi wajib diisi'),
+
+  date: yup
+    .string()
+    .required('Tanggal wajib diisi')
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Tanggal harus dalam format yyyy-mm-dd')
+    .test('isValidDate', 'Tanggal harus dalam format yyyy-mm-dd', value => {
+      const [year, month, day] = value.split('-').map(num => parseInt(num, 10));
+      const date = new Date(year, month - 1, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }),
+});
 
 export const Form = ({formType, onSubmit}) => {
   const dispatch = useDispatch();
-
   const fields = useSelector(state => state.formConfig.fields);
   const formValues = useSelector(state => state.form);
-
   const allButtons = useSelector(state => state.buttons.buttons);
   const allIcons = useSelector(state => state.icons.icons);
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: formValues,
+  });
+
+  useEffect(() => {
+    reset({
+      nominal: '',
+      description: '',
+      date: '',
+    });
+  }, []);
+
+  const handleInputChange = (fieldName, value, onChange) => {
+    onChange(value);
+    dispatch(setFormField({[fieldName]: value}));
+  };
 
   const filteredFields = fields.filter(field =>
     field.type.includes(formType.toLowerCase()),
@@ -33,22 +88,38 @@ export const Form = ({formType, onSubmit}) => {
       };
     });
 
-  const handleInputChange = (name, value) => {
-    dispatch(setFormField(name, value));
+  const onSubmitHandler = data => {
+    const formDataWithId = {
+      ...data,
+      id: uuid.v4(),
+    };
+
+    console.log('Form Data:', formDataWithId);
+    dispatch(addTransaction(formDataWithId));
+    onSubmit(formDataWithId);
   };
 
   return (
     <View>
       {filteredFields.map((field, index) => (
-        <FormInput
-          key={index}
-          label={field.label}
-          value={formValues[field.name] || ''}
-          onChangeText={value => handleInputChange(field.name, value)}
-          placeholder={field.placeholder}
-          keyboardType={field.keyboardType}
-          errorMessage={field.errorMessage}
-        />
+        <View key={index}>
+          <Controller
+            control={control}
+            name={field.name}
+            render={({field: {onChange, value}}) => (
+              <FormInput
+                label={field.label}
+                value={value || ''}
+                onChangeText={text =>
+                  handleInputChange(field.name, text, onChange)
+                }
+                placeholder={field.placeholder}
+                keyboardType={field.keyboardType}
+                errorMessage={errors[field.name]?.message}
+              />
+            )}
+          />
+        </View>
       ))}
 
       <View>
@@ -58,7 +129,7 @@ export const Form = ({formType, onSubmit}) => {
             title={btn.title}
             bgColor={btn.bgColor}
             icon={btn.icon}
-            onPress={onSubmit}
+            onPress={handleSubmit(onSubmitHandler)}
           />
         ))}
       </View>

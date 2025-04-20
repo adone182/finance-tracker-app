@@ -10,15 +10,19 @@
     "test": "jest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@reduxjs/toolkit": "^2.7.0",
     "react": "18.2.0",
+    "react-hook-form": "^7.55.0",
     "react-native": "0.73.11",
+    "react-native-uuid": "^2.0.3",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

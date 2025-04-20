@@ -24,6 +24,11 @@ export const FormModal = () => {
     dispatch(hideModal());
   };
 
+  const handleFormSubmit = formData => {
+    console.log('Form submitted:', formData);
+    handleClose();
+  };
+
   const closeIcon = getCloseIcon();
 
   return (
@@ -36,7 +41,6 @@ export const FormModal = () => {
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={() => {}}>
             <View style={styles.modalContainer}>
-              {/* Tombol Close di atas */}
               {closeIcon && (
                 <TouchableOpacity onPress={handleClose}>
                   <View style={styles.closeButton}>
@@ -55,7 +59,7 @@ export const FormModal = () => {
                   : 'Form Pengeluaran'}
               </Text>
 
-              <Form formType={formType} onSubmit={handleClose} />
+              <Form formType={formType} onSubmit={handleFormSubmit} />
             </View>
           </TouchableWithoutFeedback>
         </View>
